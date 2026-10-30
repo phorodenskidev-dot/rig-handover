@@ -16,8 +16,4 @@ export type NightDigest = {
   badLines: number;
 };
 
-export function readNight(runsDir: string, night: string): NightDigest | null {
-  void runsDir;
-  void night;
-  throw new Error('readNight is not implemented');
-}
+export { readNight } from './read.js';

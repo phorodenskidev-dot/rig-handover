@@ -80,6 +80,7 @@ export function readNight(runsDir: string, night: string): NightDigest | null {
   const text = readFileSync(path, 'utf8');
   const byJob = new Map<string, Parsed[]>();
   let badLines = 0;
+  const counts = { ok: 0, retry: 0, fail: 0 };
 
   text.split('\n').forEach((line, index) => {
     if (line.trim() === '') return;
@@ -88,6 +89,7 @@ export function readNight(runsDir: string, night: string): NightDigest | null {
       badLines += 1;
       return;
     }
+    counts[parsed.status] += 1;
     const group = byJob.get(parsed.job);
     if (group) group.push(parsed);
     else byJob.set(parsed.job, [parsed]);
@@ -97,5 +99,5 @@ export function readNight(runsDir: string, night: string): NightDigest | null {
     .map(toRow)
     .sort((a, b) => (a.job < b.job ? -1 : a.job > b.job ? 1 : 0));
 
-  return { rows, badLines };
+  return { rows, badLines, counts };
 }

@@ -11,9 +11,16 @@ export type DigestRow = {
   lastAt: string;
 };
 
+export type StatusCounts = {
+  ok: number;
+  retry: number;
+  fail: number;
+};
+
 export type NightDigest = {
   rows: DigestRow[];
   badLines: number;
+  counts: StatusCounts;
 };
 
 export { readNight } from './read.js';

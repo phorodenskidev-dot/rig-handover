@@ -53,6 +53,8 @@ describe('readNight', () => {
       firstAt: '2026-10-29T04:00:01+01:00',
       lastAt: '2026-10-29T04:00:01+01:00',
     });
+    expect(night?.counts).toEqual({ ok: 10, retry: 4, fail: 1 });
+
     expect(night?.rows.find((row) => row.job === 'rig/rotate-logs')).toMatchObject({
       owner: 'lane-07',
       runs: 1,
@@ -71,7 +73,11 @@ describe('readNight', () => {
   it('renders an empty file as no rows', () => {
     const dir = mkdtempSync(join(tmpdir(), 'rig-digest-'));
     writeFileSync(join(dir, '2026-01-01.jsonl'), '');
-    expect(readNight(dir, '2026-01-01')).toEqual({ rows: [], badLines: 0 });
+    expect(readNight(dir, '2026-01-01')).toEqual({
+      rows: [],
+      badLines: 0,
+      counts: { ok: 0, retry: 0, fail: 0 },
+    });
   });
 
   it('counts a bad line and still returns the good jobs', () => {
